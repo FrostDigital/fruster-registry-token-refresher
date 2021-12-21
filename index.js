@@ -82,7 +82,9 @@ async function refreshTokens() {
 
       const auth = {
         auths: {
-          [proxyEndpoint + ""]: { auth: authorizationToken },
+          [(proxyEndpoint + "").replace("https://", "")]: {
+            auth: authorizationToken,
+          },
           email: "none@none.com",
         },
       };
