@@ -2,7 +2,7 @@ const {
   ECRClient,
   GetAuthorizationTokenCommand,
 } = require("@aws-sdk/client-ecr");
-const { KubeConfig, CoreV1Api, AppsV1Api } = require("@kubernetes/client-node");
+const { KubeConfig, CoreV1Api } = require("@kubernetes/client-node");
 const ms = require("ms");
 
 // Assume that app runs deployed in k8s cluster if these env vars are set
@@ -39,9 +39,6 @@ const config = JSON.parse(process.env.REGISTRIES || "[]");
 
 const interval = "15m";
 
-// run every 20 min
-setInterval(refreshTokens, ms(interval));
-
 console.log(
   "Starting refresh, will refresh",
   config.length,
@@ -49,7 +46,10 @@ console.log(
   interval
 );
 
-// run directly at start
+// Start interval every N minutes
+setInterval(refreshTokens, ms(interval));
+
+// Run directly at start
 refreshTokens();
 
 async function refreshTokens() {

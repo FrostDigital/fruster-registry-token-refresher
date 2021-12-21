@@ -27,6 +27,17 @@ Configure by stringifying a JSON array and set in env var `REGISTRIES`
 REGISTRIES="[{\"name\":\"my-secret\",\"type\":\"ecr\",\"namespace\":\"my-namespace\",\"awsRegistryId\":\"688714458383\",\"awsAccessKeyId\":\"AXXXXXXXXXXXXXXX\",\"awsSecretAccessKey\":\"GVXXXXXXXXXXXXXXXXX\",\"region\":\"eu-west-1\"}]"
 ```
 
+## Deployment
+
+There are k8s specs for deployment, service account, cluster role and cluster role binding in the `k8s/` folder.
+Note that you should replace values for `REGISTRIES` etc to fit your needs.
+
+Once done, apply it with:
+
+```
+kubectl apply -f k8s/deployment.yaml
+```
+
 ## Development
 
 This was hacked in a short period of time. Feel free to improve and i.e. add support for other registries more than ecr!

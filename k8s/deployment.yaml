@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-token-refresher
+  namespace: fruster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry-token-refresher
+  template:
+    metadata:
+      labels:
+        app: registry-token-refresher
+    spec:
+      serviceAccountName: registry-token-refresher
+      containers:
+        - name: registry-token-refresher
+          image: fruster/fruster-registry-token-refresher:0.0.1
+          env:
+            - name: REGISTRIES
+              value: '[{"name": "my-registry", "type": "ecr", "namespace": "my-namespace", "awsAccessKeyId": "REPLACE_ME", "awsSecretAccessKey": "REPLACE_ME", "region":"REPLACE_ME", "awsRegistryId": "REPLACE_ME"}]'
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: fruster:registry-token-refresher
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - list
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - list
+      - get
+      - create
+      - patch
+      - update
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: fruster:registry-token-refresher
+  labels:
+    app: registry-token-refresher
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: fruster:registry-token-refresher
+subjects:
+  - kind: ServiceAccount
+    name: registry-token-refresher
+    namespace: fruster
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: registry-token-refresher
+  namespace: fruster
