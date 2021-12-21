@@ -84,8 +84,8 @@ async function refreshTokens() {
         auths: {
           [(proxyEndpoint + "").replace("https://", "")]: {
             auth: authorizationToken,
+            email: "none@none.com",
           },
-          email: "none@none.com",
         },
       };
 
