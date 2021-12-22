@@ -16,7 +16,7 @@ spec:
       serviceAccountName: registry-token-refresher
       containers:
         - name: registry-token-refresher
-          image: fruster/fruster-registry-token-refresher:0.0.1
+          image: fruster/fruster-registry-token-refresher:0.0.4
           env:
             - name: REGISTRIES
               value: '[{"name": "my-registry", "type": "ecr", "namespace": "my-namespace", "awsAccessKeyId": "REPLACE_ME", "awsSecretAccessKey": "REPLACE_ME", "region":"REPLACE_ME", "awsRegistryId": "REPLACE_ME"}]'
