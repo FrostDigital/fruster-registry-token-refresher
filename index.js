@@ -133,29 +133,18 @@ async function refreshTokens() {
         console.log(new Date(), "Refreshing token for", name);
 
         try {
-          await k8sApi.patchNamespacedSecret(
-            name,
-            namespace,
-            {
-              metadata: {
-                annotations: {
-                  "fruster.io/lastRefreshed": new Date().toISOString(),
-                },
+          await k8sApi.replaceNamespacedSecret(name, namespace, {
+            type: "kubernetes.io/dockerconfigjson",
+            metadata: {
+              name,
+              annotations: {
+                "fruster.io/lastRefreshed": new Date().toISOString(),
               },
-              data,
             },
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            {
-              headers: {
-                "Content-Type": "application/strategic-merge-patch+json",
-              },
-            }
-          );
+            data,
+          });
         } catch (err) {
-          console.error("Failed patching secret", JSON.stringify(err));
+          console.error("Failed updating secret", JSON.stringify(err));
         }
       }
     }
