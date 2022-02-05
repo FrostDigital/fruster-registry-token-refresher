@@ -7,7 +7,7 @@ creating a pod, it will eventually expire and not be present when kubernetes nee
 
 ## Usage
 
-Configure by stringifying a JSON array and set in env var `REGISTRIES`
+Configure by stringifying and base64 encode a JSON array and set in secret `registry-token-refresher` with key `REGISTRIES`.
 
 ```javascript
 [
@@ -30,7 +30,7 @@ REGISTRIES="[{\"name\":\"my-secret\",\"type\":\"ecr\",\"namespace\":\"my-namespa
 ## Deployment
 
 There are k8s specs for deployment, service account, cluster role and cluster role binding in the `k8s/` folder.
-Note that you should replace values for `REGISTRIES` etc to fit your needs.
+Note that you should replace values for `REGISTRIES` (and base64 encode it) to fit your needs.
 
 Once done, apply it with:
 
