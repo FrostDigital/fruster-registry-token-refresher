@@ -13,8 +13,8 @@ Configure by stringifying and base64 encode a JSON array and set in secret `regi
 [
   {
     name: "my-secret",
-    type: "ecr",
     namespace: "my-namespace",
+    type: "ecr",
     awsRegistryId: "688714458383",
     awsAccessKeyId: "AXXXXXXXXXXXXXXX",
     awsSecretAccessKey: "GVXXXXXXXXXXXXXXXXX",
@@ -23,9 +23,17 @@ Configure by stringifying and base64 encode a JSON array and set in secret `regi
 ];
 ```
 
-```
-REGISTRIES="[{\"name\":\"my-secret\",\"type\":\"ecr\",\"namespace\":\"my-namespace\",\"awsRegistryId\":\"688714458383\",\"awsAccessKeyId\":\"AXXXXXXXXXXXXXXX\",\"awsSecretAccessKey\":\"GVXXXXXXXXXXXXXXXXX\",\"region\":\"eu-west-1\"}]"
-```
+---
+
+| Key                  | Description                                                                                           | Example               |
+| -------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
+| `name`               |  Name of k8s secret of type `kubernetes.io/dockerconfigjson` that will be generated                   | `registry-token`      |
+| `namespace`          |  Namespace where secret will be created, should be same namespace as pods that needs to use the token | `my-namespace`        |
+| `type`               |  Type of registry, only `ecr` is supported currently                                                  | `ecr`                 |
+| `awsRegistryId`      |  Id of ecr registry                                                                                   | `688714458383`        |
+| `awsAccessKeyId`     | Access key id for AWS user that has permissions to generate auth token                                | `AXXXXXXXXXXXXXXX`    |
+| `awsSecretAccessKey` | Secret access key for AWS user that has permissions to generate auth token                            | `GVXXXXXXXXXXXXXXXXX` |
+| `region`             | AWS region where ecr registry is located                                                              | `eu-west-1`           |
 
 ## Deployment
 
