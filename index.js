@@ -53,6 +53,10 @@ setInterval(refreshTokens, ms(interval));
 refreshTokens();
 
 async function refreshTokens() {
+  if (!config.length) {
+    console.log("There are no registries to refresh");
+  }
+
   for (const reg of config) {
     const {
       name,
@@ -63,6 +67,8 @@ async function refreshTokens() {
       awsRegistryId,
       region,
     } = reg;
+
+    console.log(`Refreshing ${name}...`);
 
     if (type === "ecr") {
       const client = new ECRClient({
@@ -111,9 +117,10 @@ async function refreshTokens() {
 
       if (!exists) {
         console.log(
-          new Date(),
           "Secret does not exist, creating new one",
-          name
+          name,
+          "in namespace",
+          namespace
         );
         try {
           await k8sApi.createNamespacedSecret(namespace, {
@@ -147,6 +154,8 @@ async function refreshTokens() {
           console.error("Failed updating secret", JSON.stringify(err));
         }
       }
+    } else {
+      console.warn("Invalid registry type", type);
     }
   }
 }
